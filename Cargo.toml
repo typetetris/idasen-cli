@@ -1,0 +1,21 @@
+[package]
+name = "idasen-cli"
+version = "0.1.0"
+authors = ["Eric Wolf <ericwolf42@gmail.com>"]
+edition = "2021"
+license = "MIT"
+description = "CLI to Control IKEA IDÅSEN standing desk via Bluetooth."
+homepage = "https://github.com/typetetris/idasen-cli"
+repository = "https://github.com/typetetris/idasen-cli"
+readme = "README.md"
+keywords = ["bluetooth", "ikea", "idasen", "standing-desk"]
+exclude = [".github/workflows"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "3.0.14", features = [ "derive" ] }
+anyhow = "1.0.53"
+idasen = { git = "https://github.com/typetetris/idasen" }
+tokio = { version = "1.16.1", features = [ "macros", "rt-multi-thread" ] }
+tokio-stream = "0.1.8"
