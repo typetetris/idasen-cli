@@ -1,4 +1,5 @@
-![Continuous integration](https://github.com/typetetris/idasen-cli/workflows/Rust/badge.svg)
+![Build](https://github.com/typetetris/idasen-cli/workflows/Build/badge.svg)
+
 idasen-cli
 ==========
 
