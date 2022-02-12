@@ -16,6 +16,6 @@ exclude = [".github/workflows"]
 [dependencies]
 clap = { version = "3.0.14", features = [ "derive" ] }
 anyhow = "1.0.53"
-idasen = { git = "https://github.com/typetetris/idasen" }
+idasen = "0.2.0"
 tokio = { version = "1.16.1", features = [ "macros", "rt-multi-thread" ] }
 tokio-stream = "0.1.8"
