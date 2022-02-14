@@ -10,7 +10,6 @@ Control your IKEA IDÅSEN standing desk by a cli tool using Bluetooth.
 
 Basic Usage
 -----------
-
     CLI to Control IKEA IDÅSEN standing desk via Bluetooth.
     
     USAGE:
@@ -21,20 +20,18 @@ Basic Usage
         -V, --version    Print version information
     
     SUBCOMMANDS:
-        debug       Show position of desk
-        down        Start moving down
-        help        Print this message or the help of the given subcommand(s)
-        listen      Listen to position and speed changes
-        position    Moves desk to position <pos> mm
-        rel         Moves desk <rel> mm. Positive numbers move up, negative numbers move down
-        show        Show the current position
-        stop        Start moving down
-        up          Start moving down
+        debug      Dump data about desks we can find
+        help       Print this message or the help of the given subcommand(s)
+        list       List all saved positions
+        listen     Listen to position and speed changes
+        pos        Moves desk to position <pos> mm
+        rel        Moves desk <rel> mm. Positive numbers move up, negative numbers move down
+        restore    Move desk to position saved under a certain name
+        save       Save position of desk under a certain name
+        show       Show the current position
 
-Ideas for next steps
---------------------
+Further Ideas
+-------------
 
-1. Make a command to store position named `<name>` in `~/.config/idasen-cli/<name>`.
-1. Make a command to list stored positions.
-1. Make a command to reposition to a stored position by name.
-
+1. Remove `debug` and `listen` maybe.
+1. Improve `move_to`, if possible.

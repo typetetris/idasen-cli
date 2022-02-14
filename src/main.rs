@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use clap::{AppSettings, Parser, Subcommand};
 use idasen::{get_instance, Device, Idasen};
 use tokio_stream::StreamExt;
@@ -17,25 +19,25 @@ enum Commands {
     Rel { rel: i16 },
 
     /// Moves desk to position <pos> mm.
-    Position { pos: u16 },
-
-    /// Show position of desk.
-    Debug,
+    Pos { pos: u16 },
 
     /// Show the current position.
     Show,
 
-    /// Start moving down.
-    Down,
-
-    /// Start moving down.
-    Up,
-
-    /// Start moving down.
-    Stop,
+    /// Dump data about desks we can find.
+    Debug,
 
     /// Listen to position and speed changes.
     Listen,
+
+    /// List all saved positions
+    List,
+
+    /// Save position of desk under a certain name.
+    Save { name: PathBuf },
+
+    /// Move desk to position saved under a certain name.
+    Restore { name: PathBuf },
 }
 
 async fn report_old_pos_and_move_to<F>(f: F) -> anyhow::Result<()>
@@ -69,7 +71,7 @@ async fn main() -> anyhow::Result<()> {
         Commands::Rel { rel } => {
             report_old_pos_and_move_to(|old| old as i32 + *rel as i32).await?;
         }
-        Commands::Position { pos } => {
+        Commands::Pos { pos } => {
             report_old_pos_and_move_to(|_| *pos as i32).await?;
         }
         Commands::Show => {
@@ -112,18 +114,6 @@ async fn main() -> anyhow::Result<()> {
                 });
             }
         }
-        Commands::Up => {
-            let desk: Idasen<_> = get_instance().await?;
-            desk.up().await?
-        },
-        Commands::Down=> {
-            let desk: Idasen<_> = get_instance().await?;
-            desk.down().await?
-        },
-        Commands::Stop => {
-            let desk: Idasen<_> = get_instance().await?;
-            desk.stop().await?
-        }
         Commands::Listen => {
             let desk: Idasen<_> = get_instance().await?;
             println!("start listening use CTRL+C to stop");
@@ -132,6 +122,51 @@ async fn main() -> anyhow::Result<()> {
                 println!("pos: {:>5} speed: {:>5}", change.position, change.speed);
             }
         }
+        Commands::List => {
+            if let Some(project_dirs) = directories::ProjectDirs::from("org", "idasen", "cli") {
+                std::fs::create_dir_all(project_dirs.config_dir())?;
+                for entry in project_dirs.config_dir().read_dir()? {
+                    if let Err(err) =  print_dir_entry(entry) {
+                        eprintln!("error traversing {}: {}",
+                                  project_dirs.config_dir().to_string_lossy(),
+                                  err)
+                    }
+                }
+            } else {
+                eprintln!("oops");
+            }
+        },
+        Commands::Save{ name } => {
+            if let Some(project_dirs) = directories::ProjectDirs::from("org", "idasen", "cli") {
+                std::fs::create_dir_all(project_dirs.config_dir())?;
+                let fname = project_dirs.config_dir().join(name);
+
+                let desk: Idasen<_> = get_instance().await?;
+                let now = desk.position().await? / 10;
+                std::fs::write(fname, format!("{}", now))?;
+            } else {
+                eprintln!("oops");
+            }
+        },
+        Commands::Restore{ name } => {
+            if let Some(project_dirs) = directories::ProjectDirs::from("org", "idasen", "cli") {
+                std::fs::create_dir_all(project_dirs.config_dir())?;
+                let fname = project_dirs.config_dir().join(name);
+                let target: u16 = std::fs::read_to_string(fname)?.parse()?;
+                report_old_pos_and_move_to(|_| target as i32).await?;
+            } else {
+                eprintln!("oops");
+            }
+        },
+
+    }
+    Ok(())
+}
+
+fn print_dir_entry(entry: Result<std::fs::DirEntry, std::io::Error>) -> anyhow::Result<()> {
+    let entry = entry?;
+    if entry.file_type()?.is_file() {
+        println!("{}", entry.file_name().to_string_lossy());
     }
     Ok(())
 }
