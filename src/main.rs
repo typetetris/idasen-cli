@@ -5,7 +5,8 @@ use idasen::{get_instance, Device, Idasen};
 use tokio_stream::StreamExt;
 
 #[derive(Parser)]
-#[clap(author, version, about, long_about = None)]
+#[clap(version, about)]
+#[clap(long_about = "CLI to Control IKEA® IDÅSEN standing desk via Bluetooth.\n(This is neither made nor endorsed by IKEA®.)")]
 #[clap(global_setting(AppSettings::PropagateVersion))]
 #[clap(global_setting(AppSettings::UseLongFormatForHelpSubcommand))]
 struct Cli {

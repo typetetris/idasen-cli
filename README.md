@@ -3,14 +3,13 @@
 idasen-cli
 ==========
 
-Control your IKEA IDÅSEN standing desk by a cli tool using Bluetooth.
+Control your IKEA® IDÅSEN standing desk by a cli tool using Bluetooth.
 
-(Still some work in progress.)
-
+(This is neither made nor endorsed by IKEA®.)
 
 Basic Usage
 -----------
-    CLI to Control IKEA IDÅSEN standing desk via Bluetooth.
+    CLI to Control IKEA® IDÅSEN standing desk via Bluetooth.
     
     USAGE:
         idasen-cli <SUBCOMMAND>
