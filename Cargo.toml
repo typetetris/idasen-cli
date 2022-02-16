@@ -9,7 +9,7 @@ homepage = "https://github.com/typetetris/idasen-cli"
 repository = "https://github.com/typetetris/idasen-cli"
 readme = "README.md"
 keywords = ["bluetooth", "ikea", "idasen", "standing-desk"]
-exclude = [".github/workflows"]
+exclude = [".github/workflows", "flake.nix", "flake.lock", "default.nix"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
